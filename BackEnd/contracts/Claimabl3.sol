@@ -63,14 +63,10 @@ contract Claimabl3 is ERC721 {
 
     //** Write Functions **
 
-    function mint(bytes32 hash, uint8 v, bytes32 r, bytes32 s) public {
-        require(supply.current() <= maxSupply,"Max supply");
-        bytes32 _messageDigest = keccak256(  abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
-        address _messageSigner= ecrecover(_messageDigest, v, r, s);
-        require(_messageSigner==messageSigner);
+    function mint(address _to) private {
             supply.increment();
             uint256 _nftId=supply.current();
-          _safeMint(msg.sender,_nftId);        
+          _safeMint(_to,_nftId);        
     }
 
     //** Only Owner Functions **
@@ -79,7 +75,18 @@ contract Claimabl3 is ERC721 {
         baseURI = _newBaseURI;
     }
 
+    function setMessageSigner(address _messageSigner) public onlyOwner{
+        messageSigner=_messageSigner;
+    }
 
     //** Support Functions **
 
+    function verifyHash(bytes32 hash, uint8 v, bytes32 r, bytes32 s) public   {
+        require(supply.current() <= maxSupply,"Max supply");
+        bytes32 _messageDigest = keccak256(  abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
+        address _messageSigner= ecrecover(_messageDigest, v, r, s);
+        require(_messageSigner==messageSigner);
+        mint(msg.sender);
+
+    }
 }
