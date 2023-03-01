@@ -1,44 +1,62 @@
-import '@/styles/globals.css'
+import "../styles/globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
 
-import {
-  EthereumClient,
-  modalConnectors,
-  walletConnectProvider,
-} from "@web3modal/ethereum";
-
-import { Web3Modal } from "@web3modal/react";
-
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
+import {
+	mainnet,
+	polygon,
+	optimism,
+	arbitrum,
+	goerli,
+	polygonMumbai,
+	optimismGoerli,
+	arbitrumGoerli,
+} from "wagmi/chains";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+import MainLayout from "../layout/mainLayout";
 
-import { arbitrum, mainnet, polygon } from "wagmi/chains";
+const { chains, provider } = configureChains(
+	[
+		mainnet,
+		goerli,
+		polygon,
+		polygonMumbai,
+		optimism,
+		optimismGoerli,
+		arbitrum,
+		arbitrumGoerli,
+	],
+	[alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
+);
 
-const chains = [arbitrum, mainnet, polygon];
-
-// Wagmi client
-const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId: "ad87f6e941189959f75b0266dda1dc83" }),
-]);
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: modalConnectors({
-    projectId: "ad87f6e941189959f75b0266dda1dc83",
-    version: "1", // or "2"
-    appName: "web3Modal",
-    chains,
-  }),
-  provider,
+const { connectors } = getDefaultWallets({
+	appName: "My Alchemy DApp",
+	chains,
 });
 
-// Web3Modal Ethereum Client
-const ethereumClient = new EthereumClient(wagmiClient, chains);
+const wagmiClient = createClient({
+	autoConnect: true,
+	connectors,
+	provider,
+});
 
-
-export default function App({ Component, pageProps }) {
-  return (
-    <>
-      <WagmiConfig client={wagmiClient}>
-        <Component {...pageProps} />
-      </WagmiConfig>
-    </>
-  )
+export { WagmiConfig, RainbowKitProvider };
+function MyApp({ Component, pageProps }) {
+	return (
+		<WagmiConfig client={wagmiClient}>
+			<RainbowKitProvider
+				modalSize="compact"
+				initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
+				chains={chains}
+			>
+				<MainLayout>
+					<Component {...pageProps} />
+				</MainLayout>
+			</RainbowKitProvider>
+		</WagmiConfig>
+	);
 }
+
+export default MyApp;

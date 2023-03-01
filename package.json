@@ -1,29 +1,27 @@
 {
-  "name": "claimabl3",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@react-google-maps/api": "^2.18.1",
-    "@web3modal/ethereum": "^2.1.1",
-    "@web3modal/react": "^2.1.1",
-    "eslint": "8.35.0",
-    "eslint-config-next": "13.2.1",
-    "ethers": "^5.7.2",
-    "next": "13.2.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "use-places-autocomplete": "^4.0.0",
-    "wagmi": "^0.11.7"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.7"
-  }
+	"name": "nft-gallery",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next link",
+		"marketplace": "npx create-web3-dapp marketplace"
+	},
+	"dependencies": {
+		"@rainbow-me/rainbowkit": "^0.8.1",
+		"alchemy-sdk": "^2.3.0",
+		"google-map-react": "^2.2.0",
+		"next": "13.1.2",
+		"react": "18.2.0",
+		"react-dom": "18.2.0"
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.13",
+		"eslint": "8.20.0",
+		"eslint-config-next": "12.2.3",
+		"postcss": "^8.4.21",
+		"tailwindcss": "^3.2.7"
+	}
 }
