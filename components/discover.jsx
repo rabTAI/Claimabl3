@@ -1,13 +1,31 @@
 
-export default function Discover() {
+export default function Discover({ location, setLocation }) {
+    const userLocation = () => {
+        const coordinates = navigator.geolocation
+
+        function success(pos) {
+            const crd = pos.coords;
+            setLocation({ latitude: crd.latitude, longitude: crd.longitude })
+        }
+
+        function error(err) {
+            console.log("error:", err)
+            SetError(`Oops... ${err}`)
+        }
+        coordinates.getCurrentPosition(success, error)
+    }
+
     return (
         <>
             <h1 className="text-6xl mx-6">Map!</h1>
             <p className="text-2xl mx-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
+            <div>
+                <p className='mt-2'>Latitude: {location.latitude}</p>
+                <p>Longitude: {location.longitude}</p>
+            </div>
             <button
                 className="fixed inline-block text-lg group bottom-12"
-                onClick={() => console.log("testing location")}
+                onClick={userLocation}
             >
                 <span className="relative z-10 block px-5 py-3 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
                     <span className="absolute inset-0 w-full h-full px-5 py-3 rounded-lg bg-gray-50"></span>
