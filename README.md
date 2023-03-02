@@ -3,7 +3,9 @@ ETHDenver Hackathon, NFT GeoCaching
 
 ## Getting Started Locally
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`npx create-web3-dapp@latest
+
+`](https://github.com/alchemyplatform/create-web3-dapp).
 
 First, run the development server:
 
