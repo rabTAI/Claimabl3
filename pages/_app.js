@@ -1,6 +1,8 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
+
+
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
@@ -16,6 +18,8 @@ import {
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import MainLayout from "../layout/mainLayout";
+
+
 
 const { chains, provider } = configureChains(
 	[
@@ -42,20 +46,30 @@ const wagmiClient = createClient({
 	provider,
 });
 
+// client side rendering for openstreetmap
+
+
+
 export { WagmiConfig, RainbowKitProvider };
 function MyApp({ Component, pageProps }) {
 	return (
+
 		<WagmiConfig client={wagmiClient}>
+
 			<RainbowKitProvider
 				modalSize="compact"
 				initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
 				chains={chains}
 			>
+
 				<MainLayout>
 					<Component {...pageProps} />
 				</MainLayout>
+
 			</RainbowKitProvider>
+
 		</WagmiConfig>
+
 	);
 }
 

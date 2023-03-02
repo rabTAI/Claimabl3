@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 html,
 body {
 	background-color: rgb(253, 253, 253);
@@ -34,4 +35,9 @@ a {
 
 @media (prefers-color-scheme: dark) {
 	html {}
+}
+
+#map {
+	height: 200px;
+	width: 100%
 }

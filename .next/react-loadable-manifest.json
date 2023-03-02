@@ -1,4 +1,10 @@
 {
+  "..\\components\\discover.jsx -> ../components/map": {
+    "id": "..\\components\\discover.jsx -> ../components/map",
+    "files": [
+      "static/chunks/components_map_jsx.js"
+    ]
+  },
   "..\\node_modules\\@rainbow-me\\rainbowkit\\dist\\chunk-GEBDUYT7.js -> ./Brave-AYENFWW6.js": {
     "id": "..\\node_modules\\@rainbow-me\\rainbowkit\\dist\\chunk-GEBDUYT7.js -> ./Brave-AYENFWW6.js",
     "files": [

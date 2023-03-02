@@ -7,7 +7,7 @@ export default function Landing({ setScreen }) {
             <p className="text-2xl mx-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
             <button
-                className="fixed inline-block text-lg group bottom-12"
+                className="fixed inline-block text-lg group bottom-8"
                 onClick={() => setScreen('discover')}
             >
                 <span className="relative z-10 block px-5 py-3 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
