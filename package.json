@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@rainbow-me/rainbowkit": "^0.8.1",
 		"alchemy-sdk": "^2.3.0",
+		"geolib": "^3.3.3",
 		"google-map-react": "^2.2.0",
 		"leaflet": "^1.9.3",
 		"next": "13.1.2",

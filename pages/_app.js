@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-
+import 'leaflet/dist/leaflet.css'
 
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";

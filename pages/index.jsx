@@ -6,6 +6,7 @@ import Landing from "../components/landing";
 import Discover from "../components/discover";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
+import Navbar from "../components/navigation/navbar";
 
 export default function Home() {
   const [screen, setScreen] = useState('landing')
@@ -13,9 +14,14 @@ export default function Home() {
     latitude: "",
     longitude: ""
   });
-  const [error, SetError] = useState("")
+  const [muralLocation, setMuralLocation] = useState({
+    latitude: "39.7816",
+    longitude: "-104.9679"
+  });
+  const [error, setError] = useState("")
   const [isMinting, setIsMinting] = useState(false);
   const [metadataUrl, setMetadataUrl] = useState(null);
+  const [isThere, setIsThere] = useState(false)
 
   // This needs to be the location of each mural
   const targetLocation = [80, 80]
@@ -33,6 +39,9 @@ export default function Home() {
     <>
       <div>
         <main className={styles.main}>
+          <Navbar
+            setScreen={setScreen}
+          />
           {(screen === 'landing') ?
             <Landing
               setScreen={setScreen}
@@ -40,6 +49,11 @@ export default function Home() {
             : (screen === 'discover') ? <Discover
               setLocation={setLocation}
               location={location}
+              setError={setError}
+              error={error}
+              isThere={isThere}
+              setIsThere={setIsThere}
+              muralLocation={muralLocation}
             />
               : (screen === 'murals') ? <NFTGallery />
                 : <p>murals is false</p>}
