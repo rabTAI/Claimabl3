@@ -7,6 +7,8 @@ import Discover from "../components/discover";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import Navbar from "../components/navigation/navbar";
+import Artists from "../utils/artists.js";
+import Image from "next/image";
 
 export default function Home() {
   const [screen, setScreen] = useState('landing')
@@ -21,7 +23,8 @@ export default function Home() {
   const [error, setError] = useState("")
   const [isMinting, setIsMinting] = useState(false);
   const [metadataUrl, setMetadataUrl] = useState(null);
-  const [isThere, setIsThere] = useState(false)
+  const [isThere, setIsThere] = useState(false);
+  const [selectedMural, setSelectedMural] = useState(null);
 
   // This needs to be the location of each mural
   const targetLocation = [80, 80]
@@ -34,6 +37,8 @@ export default function Home() {
       console.log("browser supported")
     }
   })
+
+  console.log("this is the detail test", screen)
 
   return (
     <>
@@ -54,8 +59,21 @@ export default function Home() {
               isThere={isThere}
               setIsThere={setIsThere}
               muralLocation={muralLocation}
+              setScreen={setScreen}
+              setSelectedMural={setSelectedMural}
             />
-              : (screen === 'murals') ? <NFTGallery />
+              : (screen === 'mural-detail') ?
+                <div>{selectedMural.artist} <br />
+                  {selectedMural.description}<br />
+                  Coordinates: {selectedMural.location.lat}, {selectedMural.location.lng}
+                  <Image
+                    src={selectedMural.src}
+                    alt="Photo of the work"
+                    width={500}
+                    height={500}
+                    className="mx-auto mt-2"
+                  />
+                </div>
                 : <p>murals is false</p>}
         </main>
       </div>

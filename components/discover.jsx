@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { getPreciseDistance } from 'geolib';
 
-export default function Discover({ location, setLocation, setError, error, isThere, setIsThere, muralLocation }) {
+export default function Discover({ location, setLocation, setError, error, isThere, setIsThere, muralLocation, setScreen, setSelectedMural }) {
     /*     const [isConnected, setIsConnected] = useState(false) */
 
     const userLocation = () => {
@@ -18,7 +18,7 @@ export default function Discover({ location, setLocation, setError, error, isThe
 
         function error(err) {
             console.log("error:", err)
-            setError(`Oops... ${err.message}`)
+            setError(`Oops...something went wrong. Make sure location services is turned on for your browser.`)
         }
 
         const options = {
@@ -61,6 +61,8 @@ export default function Discover({ location, setLocation, setError, error, isThe
                     <div className="flex flex-col w-screen">
                         <Map
                             location={location}
+                            setScreen={setScreen}
+                            setSelectedMural={setSelectedMural}
                         />
 
                         <div className="flex flex-row justify-between mt-2">
