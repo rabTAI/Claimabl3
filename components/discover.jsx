@@ -32,7 +32,7 @@ export default function Discover({ location, setLocation, setError, error, isThe
         // Calculate distancde between user and mural and convert to feet, uses geolib - npm
         const distance = getPreciseDistance(location, muralLocation) * 3.280839895
 
-        if (distance < 300) {
+        if (distance < 150) {
             setIsThere(true)
         } else {
             setIsThere(false)
