@@ -53,6 +53,7 @@ export default function Discover({ location, setLocation, setError, error, isThe
         ssr: false
     });
 
+
     return (
         <>
             {error ? <div className="w-5/6">{error}</div> :

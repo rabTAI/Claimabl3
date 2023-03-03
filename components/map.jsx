@@ -3,9 +3,7 @@ import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import { useState } from 'react'
 import Image from 'next/image'
-import { artists } from "../utils/metadata"
-
-
+import Artists from "../utils/artists.js"
 
 export default function Map({ location }) {
     // Map properties
@@ -24,7 +22,16 @@ export default function Map({ location }) {
         iconSize: [25, 55],
     });
 
-    console.log("is this the metadata?!", artists)
+    console.log("is this the metadata?!", Artists.artists[0].artist)
+
+    console.log(Artists.artists[0].location)
+    console.log(Artists.artists[1].location)
+
+    const icon = L.icon({
+        iconUrl: "/marker-icon.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 36]
+    });
 
     return (
         <>
@@ -33,17 +40,35 @@ export default function Map({ location }) {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={position2} icon={markerIconConst}>
+                <ul>
+                    {Artists.artists.map((artist) => (
+                        <li key={artist.id}>
+                            {console.log(artist.id)}
+                            <Marker position={artist.location} icon={icon}>
+                                <Popup>
+                                    Artist: {artist.artist} <br />Description: {artist.description}
+                                    <Image
+                                        src={artist.src}
+                                        alt="Photo of the work"
+                                        width={100}
+                                        height={100}
+                                    />
+                                </Popup>
+                            </Marker>
+                        </li>
+                    ))}
+                </ul>
+                {/*                 <Marker position={Artists.artists[0].location} icon={markerIconConst}>
                     <Popup>
-                        Artist: {artists} <br />
+                        Artist: {Artists.artists[0].artist} <br />Description: {Artists.artists[0].description}
                         <Image
-                            src="/../public/IMG_6022.jpg"
-                            alt="Picture of the work"
+                            src={Artists.artists[0].src}
+                            alt="Photo of the work"
                             width={100}
                             height={100}
                         />
                     </Popup>
-                </Marker>
+                </Marker> */}
             </MapContainer>
         </>
     )
