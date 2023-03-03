@@ -11,16 +11,7 @@ export default function Map({ location }) {
     const [position, setPosition] = useState({ lat: 39.7392, lng: -104.9903 })
 
     // Location of Anthony Garcia Sr.'s Work near the National Western
-    const [position2, setPosition2] = useState({ lat: 39.7816, lng: -104.9679 })
     const ZOOM_LEVEL = 13
-
-    const markerIconConst = L.icon({
-        iconUrl: markerIcon,
-        iconRetinaUrl: markerIcon,
-        iconAnchor: [5, 55],
-        popupAnchor: [10, -44],
-        iconSize: [25, 55],
-    });
 
     console.log("is this the metadata?!", Artists.artists[0].artist)
 
@@ -52,6 +43,7 @@ export default function Map({ location }) {
                                         alt="Photo of the work"
                                         width={100}
                                         height={100}
+                                        className="mx-auto mt-2"
                                     />
                                 </Popup>
                             </Marker>
