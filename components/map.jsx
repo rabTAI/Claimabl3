@@ -56,7 +56,7 @@ export default function Map({ location, setScreen, setSelectedMural }) {
                                     <div className={`${copied ? `visible bg-primary` : `hidden`}`}>Copied!</div>
                                     Artist: {artist.artist} <br />Description: {artist.description}
                                     <br />Location:
-                                    <div id="copy-location" className="inline cursor-pointer font-bold z-10" onClick={copyToClipboard}>{artist.location.lat}, {artist.location.lng}
+                                    <div id="copy-location" className="inline cursor-pointer font-bold z-10" onClick={copyToClipboard}> {artist.location.lat}, {artist.location.lng}
                                         <Image
                                             src={"/Copy.svg"}
                                             alt="Copy Icon"
