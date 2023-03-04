@@ -1,9 +1,8 @@
 //JavaScript code should be executed in "strict mode"
 'use strict'
 
-// const ethUtil = require('ethereumjs-util')
-// const sigUtil = require('eth-sig-util')
-//Main file
+const express = require('express');
+const app = express();
 
 const { app } = require('./index.js');
 const { ethers } = require("ethers");
@@ -27,3 +26,10 @@ app.post('/getSignedMessage', async (req, res) => {
         return res.json({ signature: err });
     }
 });
+
+// Start the server
+app.listen(4782, (error) => {
+    if (error) return console.log(`Error: ${error}`);
+    console.log(`Express Server is listening on port 4782, make sure to double check the server.`);
+});
+
