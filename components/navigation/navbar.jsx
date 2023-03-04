@@ -9,8 +9,8 @@ export default function Navbar({ setScreen }) {
 			<Image
 				src={"/logo.png"}
 				alt="Logo"
-				width={250}
-				height={250}
+				width={500}
+				height={500}
 				className="w-1/2 md:w-[300px]"
 				onClick={() => setScreen("landing")}
 			/>

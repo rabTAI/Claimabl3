@@ -62,14 +62,14 @@ export default function Discover({ location, setLocation, setError, error, isThe
     return (
         <>
             {error ? <div className="w-5/6">{error}</div> :
-                <div className="flex flex-col items-center justify-center w-screen h-full">
-                    <Map
-                        location={location}
-                        setScreen={setScreen}
-                        setSelectedMural={setSelectedMural}
-                        setMuralLocation={setMuralLocation}
-                    />
-                </div >
+
+                <Map
+                    location={location}
+                    setScreen={setScreen}
+                    setSelectedMural={setSelectedMural}
+                    setMuralLocation={setMuralLocation}
+                    className="absolute bottom-0"
+                />
             }
         </>
     );
