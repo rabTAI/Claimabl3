@@ -6,7 +6,7 @@ require("dotenv").config();
  * @type import('hardhat/config').HardhatUserConfig
  */
 
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+const BASE_API_KEY = process.env.BASE_API_KEY;
 const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
 
 module.exports = {
@@ -23,21 +23,21 @@ module.exports = {
   networks: {
     localhost: {},
     hardhat: {},
-    eth_testnet: {
-      url: "https://rpc.sepolia.dev",
-      chainId: 11155111,
+    base_testnet: {
+      url: "https://base-goerli.rpc.thirdweb.com",
+      chainId: 84531,
       accounts: [DEPLOYER_PRIVATE_KEY],
       tags: ["test"],
     },
-    eth_mainnet: {
-      url: "https://api.mycryptoapi.com/eth",
-      chainId: 1,
+    base_mainnet: {
+      url: "",
+      chainId: 0,
       accounts: [DEPLOYER_PRIVATE_KEY],
       tags: ["main"],
     },
   },
   etherscan: {
-    apiKey: ETHERSCAN_API_KEY,
+    apiKey: BASE_API_KEY,
   },
   paths: {
     sources: "./contracts",

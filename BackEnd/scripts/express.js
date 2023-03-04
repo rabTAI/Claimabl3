@@ -13,25 +13,17 @@ const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
 //When FrontEnd requests a signed message
 app.post('/getSignedMessage', async (req, res) => {
     const {
-        code // The secret code to sign
+        code: message // The secret code to sign
     } = (req.body)
     try {
         // Create a wallet to sign the hash with
         let wallet = new ethers.Wallet(DEPLOYER_PRIVATE_KEY);
         console.log(wallet.address);
-
-        // The hash we wish to sign and verify
-        let messageHash = ethers.utils.id(code);
-
-        //Convert to 32 byte array
-        let messageHashBytes = ethers.utils.arrayify(messageHash)
-
         // Sign the binary data
-        let flatSig = await wallet.signMessage(messageHashBytes);
-
-        return res.json({ signedMessage: flatSig });
+        let sig = await wallet.signMessage(message);
+        return res.json({ signature: sig });
     } catch (err) {
         console.log("ERR ", err)
-        return res.json({ signedMessage: err });
+        return res.json({ signature: err });
     }
 });

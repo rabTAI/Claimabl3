@@ -7,10 +7,15 @@ Claimabl3
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 import "hardhat/console.sol";
 
 contract Claimabl3 is ERC721 {
+    using ECDSA for bytes32;
+    using ECDSA for bytes;
+
+
     using Strings for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private supply;
@@ -64,9 +69,9 @@ contract Claimabl3 is ERC721 {
     //** Write Functions **
 
     function mint(address _to) private {
-            supply.increment();
-            uint256 _nftId=supply.current();
-          _safeMint(_to,_nftId);        
+        supply.increment();  
+        uint256 _nftId=supply.current();
+        _safeMint(_to,_nftId);      
     }
 
     //** Only Owner Functions **
@@ -81,12 +86,12 @@ contract Claimabl3 is ERC721 {
 
     //** Support Functions **
 
-    function verifyHash(bytes32 hash, uint8 v, bytes32 r, bytes32 s) public   {
+    function verifyHash(string calldata message, bytes calldata signature) external   {
         require(supply.current() <= maxSupply,"Max supply");
-        bytes32 _messageDigest = keccak256(  abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
-        address _messageSigner= ecrecover(_messageDigest, v, r, s);
-        require(_messageSigner==messageSigner);
+        // bytes32 h = keccak256(message);
+        bytes memory h = bytes(message);
+        address signer = h.toEthSignedMessageHash().recover(signature);
+        require(signer==messageSigner,"Not Eligible to mint");
         mint(msg.sender);
-
     }
 }

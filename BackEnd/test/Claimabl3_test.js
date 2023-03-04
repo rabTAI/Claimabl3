@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 const { getOpcodeLength } = require("hardhat/internal/hardhat-network/stack-traces/opcodes");
 const axios = require("axios");
 const ethUtil = require('ethereumjs-util')
-const sigUtil = require('eth-sig-util')
+// const sigUtil = require('eth-sig-util')
 
 const { utils } = require('ethers');
 
@@ -23,6 +23,7 @@ describe("Claimabl3.sol", () => {
         contractFactory = await ethers.getContractFactory("Claimabl3");
         contract = await contractFactory.deploy();
         console.log("Claimabl3 deployed to:", contract.address);
+        console.log("User address ", owner.address);
     });
 
     describe("Correct setup", () => {
@@ -46,35 +47,27 @@ describe("Claimabl3.sol", () => {
         //     expect(await contract.supportsInterface('0x780e9d63')).to.equal(true);
         // });
         // it('IERC2981 royalties', async () => {
+
         //     expect(await contract.supportsInterface('0x2a55205a')).to.equal(true);
     });
 
     describe("Mint", () => {
-        it(`Should send request to server to sign the message`, async () => {
-            let code = "hello";//Later will be implemented crypto hash for each request 
+        it(`Should Mint NFTs`, async () => {
+            let message = "hello";//Later will be implemented crypto hash for each request 
             let { data } = await axios.post("http://localhost:4782/getSignedMessage", {
-                code
+                code: message
             });
+            const signingAddress = ethers.utils.verifyMessage(message, data.signature)
+            console.log("Message Signer ", signingAddress);
+            await contract.setMessageSigner("0xdB35C36CdBdD56008D73e43ef64F5F12c492883f");
 
+            let tx = await contract.verifyHash(message, data.signature);
 
-
-            // Recover the address that actually signed this message
-            const messageSignedAddress = sigUtil.recoverPersonalSignature({
-                data: ethUtil.bufferToHex(Buffer.from(code, 'utf8')),
-                sig: data.signedMessage
-            });
-            console.log(messageSignedAddress)
-            // console.log(sig)
-
-            // let sig = ethers.utils.splitSignature(data.signedMessage);
-            // let messageDigest = keccak256("\x19Ethereum Signed Message:\n32", code);
-            // const msgHex = ethUtil.bufferToHex(Buffer.from(messageDigest));
-            // const msgBuffer = ethUtil.toBuffer(msgHex);
-            // const msgHash = ethUtil.hashPersonalMessage(msgBuffer);
-            // pub = ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s);
-            // addrBuf = ethUtil.pubToAddress(pub);
-            // addr = ethUtil.bufferToHex(addrBuf);
-            // console.log(add)
+            let tokenId = await getTokenId(tx);
+            console.log("New token ID ", parseInt(tokenId));
+            console.log("Total Supply", parseInt(await contract.totalSupply()));
+            console.log("User balance ", parseInt(await contract.balanceOf(owner.address)));
+            console.log(">>>>>>");
         });
     });
 });
@@ -85,8 +78,9 @@ async function getTokenId(tx) {
     const _interface = new ethers.utils.Interface([
         'event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)',
     ]);
-    const _data = _receipt.logs[8].data;
-    const _topics = _receipt.logs[8].topics;
+    // console.log(_receipt)
+    const _data = _receipt.logs[0].data;
+    const _topics = _receipt.logs[0].topics;
     const _event = _interface.decodeEventLog('Transfer', _data, _topics);
     return _event.tokenId;
 }
