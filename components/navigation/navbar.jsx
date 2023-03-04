@@ -1,14 +1,19 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import styles from "../../styles/Navbar.module.css";
-export default function Navbar({ setScreen }) {
+import Image from "next/image";
 
+export default function Navbar({ setScreen }) {
 
 	return (
 		<nav className={styles.navbar}>
-			<h1
-				className="cursor-pointer"
+			<Image
+				src={"/logo.png"}
+				alt="Logo"
+				width={250}
+				height={250}
+				className="w-1/2 md:w-[300px]"
 				onClick={() => setScreen("landing")}
-			>Claimabl3</h1>
+			/>
 			<ConnectButton></ConnectButton>
 		</nav>
 	);

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Artists from "../utils/artists.js"
 
-export default function Map({ location, setScreen, setSelectedMural }) {
+export default function Map({ location, setScreen, setSelectedMural, setMuralLocation }) {
     // Map properties
     // Centering the Map on Denver
     const [position, setPosition] = useState({ lat: 39.7392, lng: -104.9903 })
@@ -38,11 +38,12 @@ export default function Map({ location, setScreen, setSelectedMural }) {
         setSelectedMural(artist)
         console.log("selecting the artist", artist)
         setScreen("mural-detail")
+        setMuralLocation(artist.location)
     }
 
     return (
         <>
-            <MapContainer id="map" className="z-10" center={position} zoom={ZOOM_LEVEL} scrollWheelZoom={true}>
+            <MapContainer id="map" className="" center={position} zoom={ZOOM_LEVEL} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -82,17 +83,6 @@ export default function Map({ location, setScreen, setSelectedMural }) {
                         </li>
                     ))}
                 </ul>
-                {/*                 <Marker position={Artists.artists[0].location} icon={markerIconConst}>
-                    <Popup>
-                        Artist: {Artists.artists[0].artist} <br />Description: {Artists.artists[0].description}
-                        <Image
-                            src={Artists.artists[0].src}
-                            alt="Photo of the work"
-                            width={100}
-                            height={100}
-                        />
-                    </Popup>
-                </Marker> */}
             </MapContainer>
         </>
     )

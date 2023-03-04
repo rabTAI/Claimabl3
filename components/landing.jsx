@@ -1,5 +1,4 @@
 
-
 export default function Landing({ setScreen }) {
     return (
         <>
