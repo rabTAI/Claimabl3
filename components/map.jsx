@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Artists from "../utils/artists.js"
 
-export default function Map({ location, setScreen, setSelectedMural }) {
+export default function Map({ location, setScreen, setSelectedMural, setMuralLocation }) {
     // Map properties
     // Centering the Map on Denver
     const [position, setPosition] = useState({ lat: 39.7392, lng: -104.9903 })
@@ -38,11 +38,12 @@ export default function Map({ location, setScreen, setSelectedMural }) {
         setSelectedMural(artist)
         console.log("selecting the artist", artist)
         setScreen("mural-detail")
+        setMuralLocation(artist.location)
     }
 
     return (
         <>
-            <MapContainer id="map" className="z-10" center={position} zoom={ZOOM_LEVEL} scrollWheelZoom={true}>
+            <MapContainer id="map" className="" center={position} zoom={ZOOM_LEVEL} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -50,7 +50,6 @@ const wagmiClient = createClient({
 // client side rendering for openstreetmap
 
 
-
 export { WagmiConfig, RainbowKitProvider };
 function MyApp({ Component, pageProps }) {
 	return (
@@ -62,9 +61,7 @@ function MyApp({ Component, pageProps }) {
 				initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
 				chains={chains}
 			>
-				<Head>
-					<link rel="shortcut icon" href="/favicon.ico" />
-				</Head>
+
 				<MainLayout>
 					<Component {...pageProps} />
 				</MainLayout>

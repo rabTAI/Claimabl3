@@ -10,6 +10,8 @@ import Navbar from "../components/navigation/navbar";
 import Artists from "../utils/artists.js";
 import Image from "next/image";
 import MintButton from "../components/mintButton";
+import { getPreciseDistance } from 'geolib';
+import axios from 'axios';
 
 export default function Home() {
   const [screen, setScreen] = useState('landing')
@@ -18,8 +20,8 @@ export default function Home() {
     longitude: ""
   });
   const [muralLocation, setMuralLocation] = useState({
-    latitude: "39.7816",
-    longitude: "-104.9679"
+    latitude: "",
+    longitude: ""
   });
   const [error, setError] = useState("")
   const [isMinting, setIsMinting] = useState(false);
@@ -40,8 +42,63 @@ export default function Home() {
     console.log("isThere:", isThere)
   })
 
+  const userLocation = () => {
+    const coordinates = navigator.geolocation
+
+    function success(pos) {
+      const crd = pos.coords;
+      setLocation({ latitude: crd.latitude, longitude: crd.longitude })
+      return crd
+    }
+
+    function error(err) {
+      console.log("error:", err)
+      setError(`Oops...something went wrong. Make sure location services is turned on for your browser.`)
+    }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    coordinates.getCurrentPosition(success, error, options)
+
+    // Calculate distancde between user and mural and convert to feet, uses geolib - npm
+    const distance = getPreciseDistance(location, muralLocation) * 3.280839895
+
+    // Check user distance to mural
+    if (true/* distance < 150 */) {
+      setIsThere(true)
+    } else {
+      setIsThere(false)
+    }
+    console.log("precise distance", distance, "feet")
+    console.log("are you close enough?", isThere)
+  }
+
+  const mintNFT = async () => {
+    let message = "hello";//Later will be implemented crypto hash for each request 
+    let { data } = await axios.post('/.netlify/functions/checkCode', { message });
+    const signingAddress = ethers.utils.verifyMessage(message, data.signature)
+    console.log("Message Signer ", signingAddress);
+
+    if (signingAddress === "0xdB35C36CdBdD56008D73e43ef64F5F12c492883f") {
+      let tx = await contract.verifyHash(message, data.signature);
+    } else {
+      console.log("wrong address!")
+    }
+  }
+
+  console.log("this is the NEW mural location", muralLocation)
+
   return (
     <>
+      <Head>
+        <title>Claimabl3</title>
+        <meta property="og:title" content="Claimabl3" key="title" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </Head>
       <div>
         <main className={styles.main}>
           <Navbar
@@ -61,27 +118,46 @@ export default function Home() {
                   isThere={isThere}
                   setIsThere={setIsThere}
                   muralLocation={muralLocation}
+                  setMuralLocation={setMuralLocation}
                   setScreen={setScreen}
                   setSelectedMural={setSelectedMural}
                 />
-
               </>
               : (screen === 'mural-detail') ?
-                <div>{selectedMural.artist} <br />
-                  {selectedMural.description}<br />
-                  Coordinates: {selectedMural.location.lat}, {selectedMural.location.lng}
-                  <Image
-                    src={selectedMural.src}
-                    alt="Photo of the work"
-                    width={500}
-                    height={500}
-                    className="mx-auto mt-2"
-                  />
-                </div>
+                <>
+                  <div
+                    className="cursor-pointer hover:text-secondary"
+                    onClick={() => setScreen("discover")}
+                  >Back to Map</div>
+                  <div
+                    className="w-full md:w-2/6 mx-auto"
+                  >
+                    <Image
+                      src={selectedMural.src}
+                      alt="Photo of the work"
+                      width={500}
+                      height={500}
+                      className="w-full"
+                    />
+                    <div
+                      className="block left-0 px-4 mt-2"
+                    >
+                      <b>Artist:</b> {selectedMural.artist} <br />
+                      <b>Description:</b> {selectedMural.description}<br />
+                      <b>Coordinates:</b> {selectedMural.location.lat}, {selectedMural.location.lng}
+                    </div>
+                  </div>
+
+                  <button
+                    className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[400px] active:bg-secondary"
+                    onClick={userLocation}
+                  >
+                    {isThere ? <div onClick={mintNFT}>"Claim!"</div> : "Test Location to Claim"}
+
+                  </button>
+                  {isThere.toString()}
+                </>
                 : <p>murals is false</p>}
-          <MintButton
-            isThere={isThere}
-          />
         </main>
       </div>
     </>
