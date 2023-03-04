@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import 'leaflet/dist/leaflet.css'
-
+import Head from "next/head";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
@@ -14,12 +14,12 @@ import {
 	polygonMumbai,
 	optimismGoerli,
 	arbitrumGoerli,
+	baseGoerli,
+
 } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import MainLayout from "../layout/mainLayout";
-
-
 
 const { chains, provider } = configureChains(
 	[
@@ -31,6 +31,7 @@ const { chains, provider } = configureChains(
 		optimismGoerli,
 		arbitrum,
 		arbitrumGoerli,
+		baseGoerli,
 	],
 	[alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
 );
@@ -61,7 +62,9 @@ function MyApp({ Component, pageProps }) {
 				initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
 				chains={chains}
 			>
-
+				<Head>
+					<link rel="shortcut icon" href="/favicon.ico" />
+				</Head>
 				<MainLayout>
 					<Component {...pageProps} />
 				</MainLayout>

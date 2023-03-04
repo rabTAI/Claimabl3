@@ -82,17 +82,6 @@ export default function Map({ location, setScreen, setSelectedMural }) {
                         </li>
                     ))}
                 </ul>
-                {/*                 <Marker position={Artists.artists[0].location} icon={markerIconConst}>
-                    <Popup>
-                        Artist: {Artists.artists[0].artist} <br />Description: {Artists.artists[0].description}
-                        <Image
-                            src={Artists.artists[0].src}
-                            alt="Photo of the work"
-                            width={100}
-                            height={100}
-                        />
-                    </Popup>
-                </Marker> */}
             </MapContainer>
         </>
     )

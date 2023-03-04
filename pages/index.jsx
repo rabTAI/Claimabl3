@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import Navbar from "../components/navigation/navbar";
 import Artists from "../utils/artists.js";
 import Image from "next/image";
+import MintButton from "../components/mintButton";
 
 export default function Home() {
   const [screen, setScreen] = useState('landing')
@@ -36,9 +37,8 @@ export default function Home() {
     } else {
       console.log("browser supported")
     }
+    console.log("isThere:", isThere)
   })
-
-  console.log("this is the detail test", screen)
 
   return (
     <>
@@ -51,17 +51,21 @@ export default function Home() {
             <Landing
               setScreen={setScreen}
             />
-            : (screen === 'discover') ? <Discover
-              setLocation={setLocation}
-              location={location}
-              setError={setError}
-              error={error}
-              isThere={isThere}
-              setIsThere={setIsThere}
-              muralLocation={muralLocation}
-              setScreen={setScreen}
-              setSelectedMural={setSelectedMural}
-            />
+            : (screen === 'discover') ?
+              <>
+                <Discover
+                  setLocation={setLocation}
+                  location={location}
+                  setError={setError}
+                  error={error}
+                  isThere={isThere}
+                  setIsThere={setIsThere}
+                  muralLocation={muralLocation}
+                  setScreen={setScreen}
+                  setSelectedMural={setSelectedMural}
+                />
+
+              </>
               : (screen === 'mural-detail') ?
                 <div>{selectedMural.artist} <br />
                   {selectedMural.description}<br />
@@ -75,6 +79,9 @@ export default function Home() {
                   />
                 </div>
                 : <p>murals is false</p>}
+          <MintButton
+            isThere={isThere}
+          />
         </main>
       </div>
     </>
