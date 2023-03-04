@@ -1,75 +1,53 @@
 import "../styles/globals.css";
-import "@rainbow-me/rainbowkit/styles.css";
 import 'leaflet/dist/leaflet.css'
 import Head from "next/head";
-
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import {
-	mainnet,
-	polygon,
-	optimism,
-	arbitrum,
-	goerli,
-	polygonMumbai,
-	optimismGoerli,
-	arbitrumGoerli,
-	baseGoerli,
-
-} from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
 import MainLayout from "../layout/mainLayout";
 
-const { chains, provider } = configureChains(
-	[
-		mainnet,
-		goerli,
-		polygon,
-		polygonMumbai,
-		optimism,
-		optimismGoerli,
-		arbitrum,
-		arbitrumGoerli,
-		baseGoerli,
-	],
-	[alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
-);
+import {
+	EthereumClient,
+	modalConnectors,
+	walletConnectProvider,
+} from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/react";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { arbitrum, mainnet, polygon, baseGoerli } from "wagmi/chains";
 
+const chains = [arbitrum, mainnet, polygon, baseGoerli];
 
-const { connectors } = getDefaultWallets({
-	appName: "My Alchemy DApp",
-	chains,
-});
+// Wagmi client
+const { provider } = configureChains(chains, [
+	walletConnectProvider({ projectId: "bc48326f8b7d0f6c85abe369f8016774" }),
+]);
 
 const wagmiClient = createClient({
 	autoConnect: true,
-	connectors,
+	connectors: modalConnectors({
+		projectId: "bc48326f8b7d0f6c85abe369f8016774",
+		version: "1", // or "2"
+		appName: "web3Modal",
+		chains,
+	}),
 	provider,
 });
 
-// client side rendering for openstreetmap
+// Web3Modal Ethereum Client
+const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 
-export { WagmiConfig, RainbowKitProvider };
 function MyApp({ Component, pageProps }) {
 	return (
-
-		<WagmiConfig client={wagmiClient}>
-
-			<RainbowKitProvider
-				modalSize="compact"
-				initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
-				chains={chains}
-			>
-
+		<>
+			<WagmiConfig client={wagmiClient}>
 				<MainLayout>
 					<Component {...pageProps} />
 				</MainLayout>
+			</WagmiConfig>
 
-			</RainbowKitProvider>
-
-		</WagmiConfig>
+			<Web3Modal
+				projectId="bc48326f8b7d0f6c85abe369f8016774"
+				ethereumClient={ethereumClient}
+			/>
+		</>
 
 	);
 }
