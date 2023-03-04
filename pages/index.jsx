@@ -90,7 +90,16 @@ export default function Home() {
     }
   }
 
-  console.log("this is the NEW mural location", muralLocation)
+  const copyToClipboard = (e) => {
+    const muralLocation = document.getElementById("copy-location")
+    navigator.clipboard.writeText(muralLocation.outerText)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false);
+    }, "2000")
+  }
+
+
 
   return (
     <>
@@ -145,6 +154,14 @@ export default function Home() {
                       <b>Artist:</b> {selectedMural.artist} <br />
                       <b>Description:</b> {selectedMural.description}<br />
                       <b>Coordinates:</b> {selectedMural.location.lat}, {selectedMural.location.lng}
+                      <Image
+                        src={"/Copy.svg"}
+                        alt="Copy Icon"
+                        width={20}
+                        height={20}
+                        className="inline ml-2"
+                        onClick={copyToClipboard}
+                      />
                     </div>
                   </div>
 
@@ -152,7 +169,7 @@ export default function Home() {
                     className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[400px] active:bg-secondary"
                     onClick={userLocation}
                   >
-                    {isThere ? <div onClick={mintNFT}>"Claim!"</div> : "Test Location to Claim"}
+                    {isThere ? <div onClick={mintNFT}>Claim!</div> : <div>Test Location to Claim</div>}
 
                   </button>
                   {isThere.toString()}
