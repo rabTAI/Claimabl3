@@ -12,6 +12,7 @@ import Image from "next/image";
 import MintButton from "../components/mintButton";
 import { getPreciseDistance } from 'geolib';
 import axios from 'axios';
+import { ethers } from "ethers";
 
 export default function Home() {
   const [screen, setScreen] = useState('landing')
@@ -79,7 +80,7 @@ export default function Home() {
 
   const mintNFT = async () => {
     let message = "hello";//Later will be implemented crypto hash for each request 
-    let { data } = await axios.post('/.netlify/functions/checkCode', { message });
+    let { data } = await axios.post('/.netlify/functions/getSignedMessage', { message });
     const signingAddress = ethers.utils.verifyMessage(message, data.signature)
     console.log("Message Signer ", signingAddress);
 
@@ -99,6 +100,10 @@ export default function Home() {
     }, "2000")
   }
 
+  const backToMap = () => {
+    setScreen("discover")
+    setMuralLocation("")
+  }
 
 
   return (
@@ -136,7 +141,7 @@ export default function Home() {
                 <>
                   <div
                     className="cursor-pointer hover:text-secondary"
-                    onClick={() => setScreen("discover")}
+                    onClick={backToMap}
                   >Back to Map</div>
                   <div
                     className="w-full md:w-2/6 mx-auto"

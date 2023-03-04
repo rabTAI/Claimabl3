@@ -14,7 +14,7 @@ import {
 	polygonMumbai,
 	optimismGoerli,
 	arbitrumGoerli,
-	/* 	baseGoerli, */
+	baseGoerli,
 
 } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -31,10 +31,11 @@ const { chains, provider } = configureChains(
 		optimismGoerli,
 		arbitrum,
 		arbitrumGoerli,
-		/* 		baseGoerli, */
+		baseGoerli,
 	],
 	[alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
 );
+
 
 const { connectors } = getDefaultWallets({
 	appName: "My Alchemy DApp",

@@ -6,15 +6,13 @@ export default function Navbar({ setScreen }) {
 
 	return (
 		<nav className={styles.navbar}>
-			<Image
-				src={"/logo.png"}
-				alt="Logo"
-				width={500}
-				height={500}
-				className="w-1/2 md:w-[300px]"
+			<div
+				className="cursor-pointer"
 				onClick={() => setScreen("landing")}
-			/>
-			<ConnectButton></ConnectButton>
+			>Home</div>
+			<ConnectButton
+				className="relative right-0"
+			></ConnectButton>
 		</nav>
 	);
 }

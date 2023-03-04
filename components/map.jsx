@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Artists from "../utils/artists.js"
 
-export default function Map({ location, setScreen, setSelectedMural, setMuralLocation }) {
+export default function Map({ location, setScreen, setSelectedMural, setMuralLocation, setIsThere }) {
     // Map properties
     // Centering the Map on Denver
     const [position, setPosition] = useState({ lat: 39.7392, lng: -104.9903 })
@@ -39,6 +39,7 @@ export default function Map({ location, setScreen, setSelectedMural, setMuralLoc
         console.log("selecting the artist", artist)
         setScreen("mural-detail")
         setMuralLocation(artist.location)
+        setIsThere(false)
     }
 
     return (
