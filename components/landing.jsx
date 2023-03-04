@@ -4,7 +4,13 @@ export default function Landing({ setScreen }) {
     return (
         <>
             <h1 className="text-6xl mx-6">Discover &</h1>
-            <p className="text-2xl mx-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <Image
+                src={"/claim.png"}
+                alt="Explore"
+                width={171}
+                height={48}
+                className="ml-2"
+            />
             <Image
                 src={"/explore.png"}
                 alt="Explore"

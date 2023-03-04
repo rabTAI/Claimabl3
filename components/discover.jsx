@@ -68,6 +68,7 @@ export default function Discover({ location, setLocation, setError, error, isThe
                     setScreen={setScreen}
                     setSelectedMural={setSelectedMural}
                     setMuralLocation={setMuralLocation}
+                    setIsThere={setIsThere}
                     className="absolute bottom-0"
                 />
             }
