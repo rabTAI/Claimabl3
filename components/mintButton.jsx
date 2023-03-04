@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { ConnectButton, openConnectModal } from '@rainbow-me/rainbowkit';
+
 
 export default function MintButton({ isThere }) {
 

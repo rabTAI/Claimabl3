@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { getPreciseDistance } from 'geolib';
 import axios from 'axios';
 
-export default function Discover({ location, setLocation, setError, error, isThere, setIsThere, muralLocation, setScreen, setSelectedMural, setMuralLocation }) {
+export default function Discover({ location, setLocation, setError, error, isThere, setIsThere, muralLocation, setScreen, setSelectedMural, setMuralLocation, setCopied }) {
     /*     const [isConnected, setIsConnected] = useState(false) */
 
     const userLocation = () => {
@@ -67,10 +67,13 @@ export default function Discover({ location, setLocation, setError, error, isThe
                     location={location}
                     setScreen={setScreen}
                     setSelectedMural={setSelectedMural}
+                    muralLocation={muralLocation}
                     setMuralLocation={setMuralLocation}
                     setIsThere={setIsThere}
-                    className="absolute bottom-0"
+                    setCopied={setCopied}
+                    className=""
                 />
+
             }
         </>
     );

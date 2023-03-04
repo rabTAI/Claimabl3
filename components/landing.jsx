@@ -5,18 +5,11 @@ export default function Landing({ setScreen }) {
         <>
             <h1 className="text-6xl mx-6">Discover &</h1>
             <Image
-                src={"/claim.png"}
-                alt="Explore"
-                width={171}
-                height={48}
-                className="ml-2"
-            />
-            <Image
-                src={"/explore.png"}
-                alt="Explore"
-                width={100}
-                height={100}
-                className="inline ml-2"
+                src={"/homescreen.png"}
+                alt="Home Screen"
+                width={390}
+                height={844}
+                className="absolute -top-10 w-full sm:h-full sm:w-auto"
             />
             <button
                 className="fixed inline-block text-lg group bottom-8"

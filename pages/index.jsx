@@ -17,18 +17,20 @@ import { ethers } from "ethers";
 export default function Home() {
   const [screen, setScreen] = useState('landing')
   const [location, setLocation] = useState({
-    latitude: "",
-    longitude: ""
+    lat: "",
+    lng: ""
   });
   const [muralLocation, setMuralLocation] = useState({
-    latitude: "",
-    longitude: ""
+    lat: "",
+    lng: ""
   });
   const [error, setError] = useState("")
   const [isMinting, setIsMinting] = useState(false);
   const [metadataUrl, setMetadataUrl] = useState(null);
   const [isThere, setIsThere] = useState(false);
   const [selectedMural, setSelectedMural] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   // This needs to be the location of each mural
   const targetLocation = [80, 80]
@@ -40,7 +42,6 @@ export default function Home() {
     } else {
       console.log("browser supported")
     }
-    console.log("isThere:", isThere)
   })
 
   const userLocation = () => {
@@ -79,6 +80,7 @@ export default function Home() {
   }
 
   const mintNFT = async () => {
+    setIsLoading(true)
     let message = "hello";//Later will be implemented crypto hash for each request 
     let { data } = await axios.post('/.netlify/functions/getSignedMessage', { message });
     const signingAddress = ethers.utils.verifyMessage(message, data.signature)
@@ -89,15 +91,15 @@ export default function Home() {
     } else {
       console.log("wrong address!")
     }
+    setIsLoading(false)
   }
 
-  const copyToClipboard = (e) => {
-    const muralLocation = document.getElementById("copy-location")
-    navigator.clipboard.writeText(muralLocation.outerText)
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(`${muralLocation.lat}, ${muralLocation.lng}`)
     setCopied(true)
     setTimeout(() => {
       setCopied(false);
-    }, "2000")
+    }, 2000)
   }
 
   const backToMap = () => {
@@ -135,6 +137,8 @@ export default function Home() {
                   setMuralLocation={setMuralLocation}
                   setScreen={setScreen}
                   setSelectedMural={setSelectedMural}
+                  copied={copied}
+                  setCopied={setCopied}
                 />
               </>
               : (screen === 'mural-detail') ?
@@ -154,29 +158,30 @@ export default function Home() {
                       className="w-full"
                     />
                     <div
-                      className="block left-0 px-4 mt-2"
+                      className={`block left-0 px-4 mt-2`}
                     >
                       <b>Artist:</b> {selectedMural.artist} <br />
                       <b>Description:</b> {selectedMural.description}<br />
+                      <p className={`${copied ? "bg-primary visible" : "hidden"} text-center w-1/2 mx-auto rounded`}>Copied!</p>
                       <b>Coordinates:</b> {selectedMural.location.lat}, {selectedMural.location.lng}
                       <Image
                         src={"/Copy.svg"}
                         alt="Copy Icon"
                         width={20}
                         height={20}
-                        className="inline ml-2"
+                        className="inline ml-2 cursor-pointer"
                         onClick={copyToClipboard}
                       />
                     </div>
                   </div>
 
-                  <button
-                    className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[400px] active:bg-secondary"
-                    onClick={userLocation}
-                  >
-                    {isThere ? <div onClick={mintNFT}>Claim!</div> : <div>Test Location to Claim</div>}
 
-                  </button>
+                  {isThere ? <button className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-primary active:bg-primary"
+                    onClick={mintNFT}>Claim!</button>
+                    : <button
+                      className="text-white border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-secondary active:bg-secondary"
+                      onClick={userLocation}>Test Location to Claim</button>}
+
                   {isThere.toString()}
                 </>
                 : <p>murals is false</p>}
