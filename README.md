@@ -1,6 +1,8 @@
 # Claimabl3
 ETHDenver Hackathon, NFT GeoCaching 
 
+Contract deployed on baseGoerli.
+
 ## Getting Started Locally
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`npx create-web3-dapp@latest`](https://github.com/alchemyplatform/create-web3-dapp) which comes from Alchemy.
