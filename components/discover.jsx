@@ -62,7 +62,6 @@ export default function Discover({ location, setLocation, setError, error, isThe
     return (
         <>
             {error ? <div className="w-5/6">{error}</div> :
-
                 <Map
                     location={location}
                     setScreen={setScreen}
@@ -73,7 +72,6 @@ export default function Discover({ location, setLocation, setError, error, isThe
                     setCopied={setCopied}
                     className=""
                 />
-
             }
         </>
     );
