@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import 'leaflet/dist/leaflet.css'
 import Head from "next/head";
 import MainLayout from "../layout/mainLayout";
+import { ethers } from "ethers";
 
 import {
 	EthereumClient,
@@ -10,9 +11,9 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon, baseGoerli } from "wagmi/chains";
+import { baseGoerli } from "wagmi/chains";
 
-const chains = [arbitrum, mainnet, polygon, baseGoerli];
+const chains = [baseGoerli];
 
 // Wagmi client
 const { provider } = configureChains(chains, [
@@ -32,6 +33,7 @@ const wagmiClient = createClient({
 
 // Web3Modal Ethereum Client
 const ethereumClient = new EthereumClient(wagmiClient, chains);
+
 
 
 function MyApp({ Component, pageProps }) {

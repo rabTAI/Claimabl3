@@ -45,7 +45,7 @@ export default function Map({ location, setScreen, setSelectedMural, muralLocati
 
     return (
         <>
-            <MapContainer id="map" className="absolute bottom-0 h-full" center={position} zoom={ZOOM_LEVEL} scrollWheelZoom={true}>
+            <MapContainer id="map" className="h-screen w-full" center={position} zoom={ZOOM_LEVEL} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -80,7 +80,7 @@ export default function Map({ location, setScreen, setSelectedMural, muralLocati
                                     <p
                                         className="cursor-pointer hover:text-secondary"
                                         onClick={() => captureArtist(artist)}
-                                    >Details...</p>
+                                    >Click here to Claim</p>
                                 </Popup>
                             </Marker>
                         </li>
