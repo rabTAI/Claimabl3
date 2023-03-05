@@ -35,7 +35,6 @@ const wagmiClient = createClient({
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 
-
 function MyApp({ Component, pageProps }) {
 	return (
 		<>
