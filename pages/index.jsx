@@ -12,7 +12,13 @@ import Image from "next/image";
 import MintButton from "../components/mintButton";
 import { getPreciseDistance } from 'geolib';
 import axios from 'axios';
-import { ethers } from "ethers";
+import { ethers, contract, signer } from "ethers";
+import { useWeb3Modal } from "@web3modal/react";
+import { useAccount, useContract, useContractWrite, usePrepareContractWrite, useProvider } from "wagmi";
+import config from '../contractConfig.json'
+import { UseContractConfig } from "wagmi";
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+
 
 export default function Home() {
   const [screen, setScreen] = useState('landing')
@@ -29,11 +35,8 @@ export default function Home() {
   const [metadataUrl, setMetadataUrl] = useState(null);
   const [isThere, setIsThere] = useState(false);
   const [selectedMural, setSelectedMural] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
-
-  // This needs to be the location of each mural
-  const targetLocation = [80, 80]
+  const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
 
   // Check if the browser supports geolocation
   useEffect(() => {
@@ -79,22 +82,37 @@ export default function Home() {
     console.log("are you close enough?", isThere)
   }
 
-  const mintNFT = async () => {
-    setIsLoading(true)
-    let message = "hello";//Later will be implemented crypto hash for each request 
-    let { data } = await axios.post('/.netlify/functions/getSignedMessage', { message });
-    const signingAddress = ethers.utils.verifyMessage(message, data.signature)
-    console.log("Message Signer ", signingAddress);
 
-    if (signingAddress === "0xdB35C36CdBdD56008D73e43ef64F5F12c492883f") {
-      let tx = await contract.verifyHash(message, data.signature);
-    } else {
-      console.log("wrong address!")
-    }
-    setIsLoading(false)
-  }
+  // This is where the mint function goes
+
+
+  /*   const { config } = usePrepareContractWrite({
+      address: '0xA67236eD1426b1F817C434477925C6efa21BeddC',
+      abi: [{
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "message",
+            "type": "string"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "name": "verifyHash",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }],
+      functionName: 'verifyHash',
+    })
+    const { write } = useContractWrite(config) */
+
 
   const copyToClipboard = () => {
+    console.log("copy")
     navigator.clipboard.writeText(`${muralLocation.lat}, ${muralLocation.lng}`)
     setCopied(true)
     setTimeout(() => {
@@ -107,6 +125,12 @@ export default function Home() {
     setMuralLocation("")
   }
 
+
+
+  /*   const trialQuery = async () => await provider.getBlockNumber()
+    const blocknumber = trialQuery()
+    console.log("I actually queried the blockchain", blocknumber) */
+  //
 
   return (
     <>
@@ -139,6 +163,7 @@ export default function Home() {
                   setSelectedMural={setSelectedMural}
                   copied={copied}
                   setCopied={setCopied}
+                  className="h-full"
                 />
               </>
               : (screen === 'mural-detail') ?
@@ -176,10 +201,10 @@ export default function Home() {
                   </div>
 
 
-                  {isThere ? <button className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-primary active:bg-primary"
-                    onClick={mintNFT}>Claim!</button>
+                  {isThere ? <button className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-primary active:bg-secondary"
+                    /* onClick={ } */>Claim!</button>
                     : <button
-                      className="text-white border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-secondary active:bg-secondary"
+                      className="text-white border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-secondary active:bg-primary"
                       onClick={userLocation}>Test Location to Claim</button>}
 
                   {isThere.toString()}
