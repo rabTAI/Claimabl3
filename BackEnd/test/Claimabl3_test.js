@@ -1,13 +1,8 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { getOpcodeLength } = require("hardhat/internal/hardhat-network/stack-traces/opcodes");
 const axios = require("axios");
-const ethUtil = require('ethereumjs-util')
-// const sigUtil = require('eth-sig-util')
+var crypto = require("crypto");
 
-const { utils } = require('ethers');
-
-const keccak256 = require('keccak256')
 
 
 describe("Claimabl3.sol", () => {
@@ -53,7 +48,7 @@ describe("Claimabl3.sol", () => {
 
     describe("Mint", () => {
         it(`Should Mint NFTs`, async () => {
-            let message = "hello";//Later will be implemented crypto hash for each request 
+            let message = crypto.randomBytes(20).toString('hex');
             let { data } = await axios.post("http://localhost:4782/getSignedMessage", {
                 code: message
             });
