@@ -12,7 +12,7 @@ export default {
             id: 2,
             artist: "Detour",
             description: "Mural",
-            src: "/detourthumbnail.jpg",
+            src: "/detourthumbnail_sm.jpg",
             location: ({ lat: 39.7562, lng: -104.9762 }),
             address: "0x..."
         }

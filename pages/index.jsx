@@ -14,13 +14,21 @@ import { getPreciseDistance } from 'geolib';
 import axios from 'axios';
 import { ethers, contract, signer } from "ethers";
 import { useWeb3Modal } from "@web3modal/react";
-import { useAccount, useContract, useContractWrite, usePrepareContractWrite, useProvider } from "wagmi";
-import config from '../contractConfig.json'
-import { UseContractConfig } from "wagmi";
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import {
+  useAccount,
+  useConnect,
+  useContract,
+  useContractRead,
+  useContractWrite,
+  useNetwork,
+  useSigner,
+  useWaitForTransaction,
+} from "wagmi";
+import smartContract from '../contractConfig.json'
 
 
 export default function Home() {
+  const CONTRACT_ADDRESS = "0xA67236eD1426b1F817C434477925C6efa21BeddC";
   const [screen, setScreen] = useState('landing')
   const [location, setLocation] = useState({
     lat: "",
@@ -84,33 +92,37 @@ export default function Home() {
 
 
   // This is where the mint function goes
+  const { data: signerData } = useSigner();
 
+  const {
+    data: mintData,
+    write: mintToken,
+    isLoading: isMintLoading,
+    isSuccess: isMintStarted,
+    error: mintError,
+  } = useContractWrite({
+    addressOrName: CONTRACT_ADDRESS,
+    contractInterface: smartContract.abi,
+    functionName: "transferFrom", //<<<<<<<<<<<<<<
+  });
 
-  /*   const { config } = usePrepareContractWrite({
-      address: '0xA67236eD1426b1F817C434477925C6efa21BeddC',
-      abi: [{
-        "inputs": [
-          {
-            "internalType": "string",
-            "name": "message",
-            "type": "string"
-          },
-          {
-            "internalType": "bytes",
-            "name": "signature",
-            "type": "bytes"
-          }
-        ],
-        "name": "verifyHash",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      }],
-      functionName: 'verifyHash',
-    })
-    const { write } = useContractWrite(config) */
+  const mintTokens = async () => {
+    await mintToken({
+      args: [
+        "0xd2090025857B9C7B24387741f120538E928A3a59", //<<<<<<<<<<<<<<< TEST
+        "0x388C818CA8B9251b393131C08a736A67ccB19297", //<<<<<<<<<<<<<<< TEST 
+        ethers.utils.parseEther("2")
+      ],
+    });
+  };
 
+  const rabsVersion = async () => {
+    let message = "hello";
+    let { data } = await axios.post('http://185.252.233.36:4782/getSignedMessage', { message });
+    console.log(data)
+  }
 
+  ////////////////////////
   const copyToClipboard = () => {
     console.log("copy")
     navigator.clipboard.writeText(`${muralLocation.lat}, ${muralLocation.lng}`)
@@ -202,7 +214,7 @@ export default function Home() {
 
 
                   {isThere ? <button className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-primary active:bg-secondary"
-                    /* onClick={ } */>Claim!</button>
+                    onClick={rabsVersion}>Claim!</button>
                     : <button
                       className="text-white border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-secondary active:bg-primary"
                       onClick={userLocation}>Test Location to Claim</button>}
