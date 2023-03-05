@@ -1,5 +1,6 @@
 # Claimabl3
 [claimabl3.xyz](www.claimabl3.xyz)
+
 ETHDenver Hackathon. Geo-locked NFTs for mural art.
 
 In oder to provide a geographically constrained minting feature the mint function is only allowed for a single private address. This eliminates the possibility of minting directly from the contract. Once the user has verified location on their device, they send a message that triggers the minting from the single address.
