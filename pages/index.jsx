@@ -23,6 +23,7 @@ import {
   useNetwork,
   useSigner,
   useWaitForTransaction,
+  usePrepareContractWrite,
 } from "wagmi";
 import smartContract from '../contractConfig.json'
 
@@ -44,16 +45,12 @@ export default function Home() {
   const [isThere, setIsThere] = useState(false);
   const [selectedMural, setSelectedMural] = useState(null);
   const [copied, setCopied] = useState(false)
-  const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
+  const [signature, setSignature] = useState()
 
-  // Check if the browser supports geolocation
-  useEffect(() => {
-    if (!("geolocation" in navigator)) {
-      console.log("geolocation is not supported")
-    } else {
-      console.log("browser supported")
-    }
-  })
+  const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
+  const { address, isConnected } = useAccount();
+
+
 
   const userLocation = () => {
     const coordinates = navigator.geolocation
@@ -92,35 +89,51 @@ export default function Home() {
 
 
   // This is where the mint function goes
-  const { data: signerData } = useSigner();
-
-  const {
-    data: mintData,
-    write: mintToken,
-    isLoading: isMintLoading,
-    isSuccess: isMintStarted,
-    error: mintError,
-  } = useContractWrite({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: smartContract.abi,
-    functionName: "transferFrom", //<<<<<<<<<<<<<<
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    mode: "recklesslyUnprepared",
+    address: CONTRACT_ADDRESS,
+    abi: smartContract.abi,
+    functionName: "verifyHash",
+    // args: [],
+    chainId: 84531,
   });
 
+
   const mintTokens = async () => {
-    await mintToken({
-      args: [
-        "0xd2090025857B9C7B24387741f120538E928A3a59", //<<<<<<<<<<<<<<< TEST
-        "0x388C818CA8B9251b393131C08a736A67ccB19297", //<<<<<<<<<<<<<<< TEST 
-        ethers.utils.parseEther("2")
-      ],
-    });
+
+    if (!isConnected) {
+      open();
+    } else if (isConnected) {
+      console.log("wallet is connected")
+    };
+    // Create a wallet to sign the hash with
+    const wallet = new ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY);
+    console.log(wallet.address);
+    // Sign the binary data
+    const message = "hello";//Later will be implemented crypto hash for each request 
+    const sig = await wallet.signMessage(message);
+
+    const signingAddress = ethers.utils.verifyMessage(message, sig)
+    console.log("Message Signer ", signingAddress);
+    if (signingAddress === wallet.address) {
+
+      const mintResult = write({
+        recklesslySetUnpreparedArgs: [
+          message,
+          sig,
+        ],
+        validate: true
+      });
+    }
   };
 
-  const rabsVersion = async () => {
-    let message = "hello";
-    let { data } = await axios.post('https://185.252.233.36:4782/getSignedMessage', { message });
-    console.log(data)
-  }
+
+
+  /*   const rabsVersion = async () => {
+      let message = "hello";
+      let { data } = await axios.post('https://185.252.233.36:4782/getSignedMessage', { message });
+      console.log(data)
+    } */
 
   ////////////////////////
   const copyToClipboard = () => {
@@ -138,11 +151,15 @@ export default function Home() {
   }
 
 
+  // Check if the browser supports geolocation and other minting status
+  useEffect(() => {
+    if (!("geolocation" in navigator)) {
+      console.log("geolocation is not supported")
+    } else {
+      console.log("browser supported")
+    }
 
-  /*   const trialQuery = async () => await provider.getBlockNumber()
-    const blocknumber = trialQuery()
-    console.log("I actually queried the blockchain", blocknumber) */
-  //
+  }, [])
 
   return (
     <>
@@ -214,7 +231,7 @@ export default function Home() {
 
 
                   {isThere ? <button className="border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-primary active:bg-secondary"
-                    onClick={rabsVersion}>Claim!</button>
+                    onClick={mintTokens}>Claim!</button>
                     : <button
                       className="text-white border border-2 border-black rounded p-2 mt-2 w-5/6 md:w-[250px] bg-secondary active:bg-primary"
                       onClick={userLocation}>Test Location to Claim</button>}
