@@ -3,7 +3,6 @@ import Image
 export default function Landing({ setScreen }) {
     return (
         <>
-            <h1 className="text-6xl mx-6">Discover &</h1>
             <Image
                 src={"/homescreen.png"}
                 alt="Home Screen"
