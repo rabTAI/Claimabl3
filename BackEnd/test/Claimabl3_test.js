@@ -57,6 +57,7 @@ describe("Claimabl3.sol", () => {
             let { data } = await axios.post("http://localhost:4782/getSignedMessage", {
                 code: message
             });
+            console.log('tst')
             const signingAddress = ethers.utils.verifyMessage(message, data.signature)
             console.log("Message Signer ", signingAddress);
             await contract.setMessageSigner("0xdB35C36CdBdD56008D73e43ef64F5F12c492883f");

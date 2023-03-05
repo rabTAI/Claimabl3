@@ -9,8 +9,6 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
-import "hardhat/console.sol";
-
 contract Claimabl3 is ERC721 {
     using ECDSA for bytes32;
     using ECDSA for bytes;
@@ -27,7 +25,7 @@ contract Claimabl3 is ERC721 {
     string public baseURI;
    
 
-    uint16 public constant maxSupply = 40;
+    uint16 public constant maxSupply =33;
 
 
 
@@ -88,7 +86,6 @@ contract Claimabl3 is ERC721 {
 
     function verifyHash(string calldata message, bytes calldata signature) external   {
         require(supply.current() <= maxSupply,"Max supply");
-        // bytes32 h = keccak256(message);
         bytes memory h = bytes(message);
         address signer = h.toEthSignedMessageHash().recover(signature);
         require(signer==messageSigner,"Not Eligible to mint");
