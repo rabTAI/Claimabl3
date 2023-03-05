@@ -1,6 +1,6 @@
+/* require('dotenv').config() */
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import NFTGallery from "../components/nftGallery";
 import { useState } from "react";
 import Landing from "../components/landing";
 import Discover from "../components/discover";
@@ -16,20 +16,13 @@ import { ethers, contract, signer } from "ethers";
 import { useWeb3Modal } from "@web3modal/react";
 import {
   useAccount,
-  useConnect,
-  useContract,
-  useContractRead,
   useContractWrite,
-  useNetwork,
-  useSigner,
-  useWaitForTransaction,
-  usePrepareContractWrite,
 } from "wagmi";
 import smartContract from '../contractConfig.json'
-
+import crypto from "crypto";
 
 export default function Home() {
-  const CONTRACT_ADDRESS = "0xA67236eD1426b1F817C434477925C6efa21BeddC";
+  const CONTRACT_ADDRESS = "0x576131F45ACdAcdBFCc89A1dB61fd45f6D11CE8a";
   const [screen, setScreen] = useState('landing')
   const [location, setLocation] = useState({
     lat: "",
@@ -49,8 +42,6 @@ export default function Home() {
 
   const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
   const { address, isConnected } = useAccount();
-
-
 
   const userLocation = () => {
     const coordinates = navigator.geolocation
@@ -78,7 +69,7 @@ export default function Home() {
     const distance = getPreciseDistance(location, muralLocation) * 3.280839895
 
     // Check user distance to mural
-    if (true/* distance < 150 */) {
+    if (distance < 150) {
       setIsThere(true)
     } else {
       setIsThere(false)
@@ -110,7 +101,7 @@ export default function Home() {
     const wallet = new ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY);
     console.log(wallet.address);
     // Sign the binary data
-    const message = "hello";//Later will be implemented crypto hash for each request 
+    const message = crypto.randomBytes(20).toString('hex');
     const sig = await wallet.signMessage(message);
 
     const signingAddress = ethers.utils.verifyMessage(message, sig)
