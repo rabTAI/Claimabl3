@@ -8,7 +8,7 @@ import Artists from "../utils/artists.js"
 export default function Map({ location, setScreen, setSelectedMural, muralLocation, setMuralLocation, setIsThere, copied, setCopied }) {
     // Map properties
     // Centering the Map on Denver
-    const [position, setPosition] = useState({ lat: 39.7392, lng: -104.9903 })
+    const [position, setPosition] = useState({ lat: 39.7816, lng: -104.9679 })
 
 
     // Location of Anthony Garcia Sr.'s Work near the National Western
@@ -61,14 +61,14 @@ export default function Map({ location, setScreen, setSelectedMural, muralLocati
                                     Artist: {artist.artist} <br />Description: {artist.description}
                                     <br />Location:
                                     <div id="copy-location" className="inline cursor-pointer font-bold z-10"> {artist.location.lat}, {artist.location.lng}
-                                        {/*                                         <Image
+                                        <Image
                                             src={"/Copy.svg"}
                                             alt="Copy Icon"
                                             width={20}
                                             height={20}
                                             className="inline ml-2"
                                             onClick={copyToClipboard}
-                                        /> */}
+                                        />
                                     </div>
                                     <Image
                                         src={artist.src}
