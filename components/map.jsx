@@ -58,9 +58,13 @@ export default function Map({ location, setScreen, setSelectedMural, muralLocati
                                 <Popup
                                 >
                                     <div className={`${copied ? `visible bg-primary` : `hidden`}`}>Copied!</div>
-                                    Artist: {artist.artist} <br />Description: {artist.description}
-                                    <br />Location:
+                                    <b>Artist:</b> {artist.artist}
+                                    <div className="overflow-y-scroll max-h-[150px]">
+                                        <b>Description:</b> {artist.description}
+                                    </div>
+                                    <br /><b>Location:</b>
                                     <div id="copy-location" className="inline cursor-pointer font-bold z-10"> {artist.location.lat}, {artist.location.lng}
+
                                         <Image
                                             src={"/Copy.svg"}
                                             alt="Copy Icon"

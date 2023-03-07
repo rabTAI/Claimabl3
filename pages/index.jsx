@@ -1,17 +1,12 @@
-/* require('dotenv').config() */
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import Landing from "../components/landing";
 import Discover from "../components/discover";
 import { useEffect } from "react";
-import dynamic from "next/dynamic";
 import Navbar from "../components/navigation/navbar";
-import Artists from "../utils/artists.js";
 import Image from "next/image";
-import MintButton from "../components/mintButton";
 import { getPreciseDistance } from 'geolib';
-import axios from 'axios';
 import { ethers, contract, signer } from "ethers";
 import { useWeb3Modal } from "@web3modal/react";
 import {
@@ -20,6 +15,7 @@ import {
 } from "wagmi";
 import smartContract from '../contractConfig.json'
 import crypto from "crypto";
+import weather from "./api/weather";
 
 export default function Home() {
   const CONTRACT_ADDRESS = "0x576131F45ACdAcdBFCc89A1dB61fd45f6D11CE8a";
@@ -37,8 +33,9 @@ export default function Home() {
   const [metadataUrl, setMetadataUrl] = useState(null);
   const [isThere, setIsThere] = useState(false);
   const [selectedMural, setSelectedMural] = useState(null);
-  const [copied, setCopied] = useState(false)
-  const [signature, setSignature] = useState()
+  const [copied, setCopied] = useState(false);
+  const [signature, setSignature] = useState();
+  const [currentTemp, setCurrentTemp] = useState();
 
   const { isOpen, open, close, setDefaultChain } = useWeb3Modal();
   const { address, isConnected } = useAccount();
@@ -97,8 +94,18 @@ export default function Home() {
     } else if (isConnected) {
       console.log("wallet is connected")
     };
+
+    const key1 = process.env.DEPLOYER_PRIVATE_KEY
+if (key1) {
+  console.log("THIS IS TRUE DEPLOYER")
+} else {
+  console.log("THIS IS false DEPLOYER")
+}
+
     // Create a wallet to sign the hash with
-    const wallet = new ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY);
+
+    const wallet = new ethers.Wallet(key1);
+
     console.log(wallet.address);
     // Sign the binary data
     const message = crypto.randomBytes(20).toString('hex');
@@ -117,14 +124,6 @@ export default function Home() {
       });
     }
   };
-
-
-
-  /*   const raVersion = async () => {
-      let message = "hello";
-      let { data } = await axios.post('https://185.252.233.36:4782/getSignedMessage', { message });
-      console.log(data)
-    } */
 
   ////////////////////////
   const copyToClipboard = () => {
@@ -152,6 +151,7 @@ export default function Home() {
 
   }, [])
 
+
   return (
     <>
       <Head>
@@ -165,9 +165,13 @@ export default function Home() {
             setScreen={setScreen}
           />
           {(screen === 'landing') ?
+            <>
+
             <Landing
               setScreen={setScreen}
             />
+
+            </>
             : (screen === 'discover') ?
               <>
                 <Discover
@@ -228,6 +232,7 @@ export default function Home() {
                       onClick={userLocation}>Test Location to Claim</button>}
 
                   {isThere.toString()}
+  
                 </>
                 : <p>murals is false</p>}
         </main>
