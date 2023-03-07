@@ -3,13 +3,13 @@ import Image
 export default function Landing({ setScreen }) {
     return (
         <>
-            <Image
+ {<Image
                 src={"/homescreen.png"}
                 alt="Home Screen"
                 width={390}
                 height={844}
                 className="absolute -top-10 w-full sm:h-full sm:w-auto"
-            />
+            /> }
             <button
                 className="fixed inline-block text-lg group bottom-8"
                 onClick={() => setScreen('discover')}
