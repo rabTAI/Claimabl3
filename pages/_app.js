@@ -1,8 +1,6 @@
 import '../styles/globals.css';
 import 'leaflet/dist/leaflet.css';
-import Head from 'next/head';
 import MainLayout from '../layout/mainLayout';
-import { ethers } from 'ethers';
 
 import {
   EthereumClient,
@@ -14,24 +12,15 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { baseGoerli } from 'wagmi/chains';
 
 const chains = [baseGoerli];
+const projectId = 'bc48326f8b7d0f6c85abe369f8016774';
 
 // Wagmi client
-const { provider } = configureChains(chains, [
-  w3mProvider({ projectId: 'bc48326f8b7d0f6c85abe369f8016774' }),
-]);
-
+const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: w3mConnectors({
-    projectId: 'bc48326f8b7d0f6c85abe369f8016774',
-    version: '1', // or "2"
-    appName: 'web3Modal',
-    chains,
-  }),
+  connectors: w3mConnectors({ projectId, version: 1, chains }),
   provider,
 });
-
-// Web3Modal Ethereum Client
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 function MyApp({ Component, pageProps }) {
@@ -43,10 +32,7 @@ function MyApp({ Component, pageProps }) {
         </MainLayout>
       </WagmiConfig>
 
-      <Web3Modal
-        projectId='bc48326f8b7d0f6c85abe369f8016774'
-        ethereumClient={ethereumClient}
-      />
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
   );
 }
